@@ -1,0 +1,37 @@
+########################################################################
+#
+# Source this in .bash_profile and have kali commands on your console...
+#
+########################################################################
+
+docker_command='docker run -it --rm kali'
+
+# Just type kali for a command prompt!
+alias kali='$docker_command /bin/bash'
+
+# These may be installed locally
+#alias nslookup='$docker_command nslookup'
+#alias whois='$docker_command whois'
+
+# Kali apps
+alias dirb='$docker_command dirb'
+alias dnsenum='$docker_command dnsenum'
+alias dnsmap='$docker_command dnsmap'
+alias dnsrecon='$docker_command dnsrecon'
+alias enum4linux='$docker_command enum4linux'
+alias fierce='$docker_command fierce'
+alias hydra='$docker_command hydra'
+alias msfconsole='$docker_command msfconsole'
+alias msfvenom='$docker_command msfvenom'
+alias nbtscan='$docker_command nbtscan'
+alias nikto='$docker_command nikto'
+alias nmap='$docker_command nmap'
+alias recon-ng='$docker_command recon-ng'
+alias snmpcheck='$docker_command snmpcheck'
+alias sqlmap='$docker_command sqlmap'
+alias tcptraceroute='$docker_command tcptraceroute'
+alias theharvester='$docker_command theharvester'
+alias wpscan='$docker_command wpscan'
+
+
+
