@@ -39,4 +39,4 @@ RUN printf "alias ll='ls $LS_OPTIONS -l'\nalias l='ls $LS_OPTIONS -lA'\n\n# enab
 
 RUN mkdir /data
 
-CMD "/bin/bash"
+CMD ["/bin/bash"]
