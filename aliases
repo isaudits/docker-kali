@@ -7,10 +7,19 @@
 #
 ###############################################################################
 
-kali_command='docker run -it --rm -p 80:80 -p 443:443 -p 4443-4444:4443-4444 -p 8443:8443 kali'
+# Check if a container named kali is running; if so, attach and execute; otherwise, run it
+# Note - since this is sourced in profile it loads when the terminal window is opened and will
+# not work properly from a terminal that was opened before the initial run command was executed...
+
+if [[ $(docker ps -f "name=kali" --format '{{.Names}}') == kali ]]
+then
+    kali_command='docker exec -it kali'
+else
+    kali_command='docker run -it --rm --name kali -p 80:80 -p 443:443 -p 4443-4444:4443-4444 -p 8443:8443 kali'
+fi
 
 # Just type kali for a command prompt!
-alias kali='$kali_command /bin/bash'
+alias kali='$kali_command'
 
 # These may be installed locally
 #alias nslookup='$kali_command nslookup'
