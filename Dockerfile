@@ -14,7 +14,8 @@ RUN apt-get -y update && apt-get -y upgrade && \
    hydra \
    ike-scan \
    joomscan \
-   metasploit-framework \
+   # Metasploit adds 700MB size; standalone metasploit docker image is only 400MB; comment out if not needed
+   #metasploit-framework \
    nbtscan \
    nikto \
    nmap \
@@ -25,11 +26,13 @@ RUN apt-get -y update && apt-get -y upgrade && \
    tcptraceroute \
    whois \
    wpscan \
+   # Standard tools
    dnsutils \
    curl \
    net-tools \
    pciutils \
    bash-completion && \
+   # Cleanup
    apt-get autoremove -y && \
    apt-get clean && \
    rm -rf /var/lib/apt/lists/*
