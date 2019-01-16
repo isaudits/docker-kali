@@ -5,6 +5,8 @@
 # Note - cannot use same variable name if using this technique to alias multiple files;
 # Variable goes into path!
 #
+# kali root directory maps to host $HOME/.kali
+#
 ###############################################################################
 
 # Check if a container named kali is running; if so, attach and execute; otherwise, run it
@@ -15,7 +17,8 @@ if [[ $(docker ps -f "name=kali" --format '{{.Names}}') == kali ]]
 then
     kali_command='docker exec -it kali'
 else
-    kali_command='docker run -it --rm --name kali -p 80:80 -p 443:443 -p 4443-4444:4443-4444 -p 8443:8443 kali'
+    # NOTE - have to break single quote around $HOME to expand variable string; docker run will not accept $HOME variable
+    kali_command='docker run -it --rm --name kali -v '$HOME'/.kali:/root -p 80:80 -p 443:443 -p 4443-4444:4443-4444 -p 8443:8443 kali'
 fi
 
 # Just type kali for a command prompt!
