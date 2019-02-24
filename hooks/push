@@ -1,0 +1,6 @@
+#!/bin/bash
+set -ueo pipefail
+
+docker push isaudits/kali:base
+docker push isaudits/kali:msf
+docker push isaudits/kali:latest

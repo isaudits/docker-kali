@@ -2,40 +2,78 @@ FROM kalilinux/kali-linux-docker
 
 LABEL maintainer="mcjon3z"
 
-RUN apt-get -y update && apt-get -y upgrade && \
-   apt-get install -y \
-   crackmapexec \
-   dirb \
-   dnsenum \
-   dnsmap \
-   dnsrecon \
-   enum4linux \
-   fierce \
-   hydra \
-   ike-scan \
-   joomscan \
-   # Metasploit adds 700MB size; standalone metasploit docker image is only 400MB; comment out if not needed
-   #metasploit-framework \
-   nbtscan \
-   nikto \
-   nmap \
-   recon-ng \
-   snmpcheck \
-   sqlmap \
-   theharvester \
-   tcptraceroute \
-   whois \
-   wpscan \
-   # Standard tools
-   dnsutils \
-   curl \
-   net-tools \
-   pciutils \
-   bash-completion && \
-   # Cleanup
-   apt-get autoremove -y && \
-   apt-get clean && \
-   rm -rf /var/lib/apt/lists/*
+ARG BUILD_DATE
+ARG VCS_REF
+
+ARG TOOLS_BASE="dnsutils \
+                git \
+                curl \
+                net-tools \
+                pciutils \
+                bash-completion"
+
+#NOTE - metasploit installed in later build; not included in base
+ARG TOOLS_KALI="crackmapexec \
+                dirb \
+                dnsenum \
+                dnsmap \
+                dnsrecon \
+                enum4linux \
+                fierce \
+                hydra \
+                ike-scan \
+                joomscan \
+                nbtscan \
+                netcat \
+                nfs-common \
+                nikto \
+                nmap \
+                recon-ng \
+                rpcbind \
+                snmpcheck \
+                sqlmap \
+                sslscan \
+                sslyze \
+                theharvester \
+                tcptraceroute \
+                whatweb \
+                whois \
+                wpscan"
+
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get install -y --no-install-recommends $TOOLS_BASE && \
+    apt-get install -y --no-install-recommends $TOOLS_KALI && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+    
+RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
+    rm -rf /opt/SecLists/.git && \
+    rm -rf /opt/SecLists/*.gz && \
+    rm -rf /opt/SecLists/Fuzzing && \
+    rm -rf /opt/SecLists/IOCs && \
+    rm -rf /opt/SecLists/Pattern-Matching && \
+    rm -rf /opt/SecLists/Payloads && \
+    rm -rf /opt/SecLists/Web-Shells && \
+    rm -rf /opt/SecLists/Passwords/Cracked-Hashes && \
+    rm -rf /opt/SecLists/Passwords/Honeypot-Captures && \
+    rm -rf /opt/SecLists/Passwords/Leaked-Databases && \
+    rm -rf /opt/SecLists/Passwords/Malware && \
+    rm -rf /opt/SecLists/Passwords/Permutations && \
+    rm -rf /opt/SecLists/Passwords/Software && \
+    rm -rf /opt/SecLists/Passwords/WiFi-WPA
+    
+RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
+    rm -rf /opt/scripts/.git && \
+    ln -s /opt/scripts/iker.py /usr/bin/iker && \
+    ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
+    ln -s /opt/scripts/externalIP /usr/bin/externalIP && \
+    git clone --depth=1 https://github.com/wereallfeds/webshag /opt/webshag && \
+    rm -rf /opt/webshag/.git && \
+    cd /opt/webshag/ && \
+    echo -e "\n" | python setup.linux.py && \
+    ln -s /opt/webshag/webshag_cli.py /usr/bin/webshag-cli
 
 #Bash completion
 RUN printf "alias ll='ls $LS_OPTIONS -l'\nalias l='ls $LS_OPTIONS -lA'\n\n# enable bash completion in interactive shells\nif [ -f /etc/bash_completion ] && ! shopt -oq posix; then\n    . /etc/bash_completion\nfi\n" > /root/.bashrc
@@ -43,3 +81,8 @@ RUN printf "alias ll='ls $LS_OPTIONS -l'\nalias l='ls $LS_OPTIONS -lA'\n\n# enab
 RUN mkdir /data
 
 CMD ["/bin/bash"]
+
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-url="https://github.com/isaudits/docker-kali" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.schema-version="1.0.0-rc1"
