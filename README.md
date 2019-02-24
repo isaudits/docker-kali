@@ -1,4 +1,10 @@
 # docker-kali
+[![](https://images.microbadger.com/badges/image/isaudits/kali.svg)](https://microbadger.com/images/isaudits/kali)
+[![](https://images.microbadger.com/badges/version/isaudits/kali:base.svg)](https://microbadger.com/images/isaudits/kali:base)
+[![](https://images.microbadger.com/badges/version/isaudits/kali:latest.svg)](https://microbadger.com/images/isaudits/kali:latest)
+
+[![](https://images.microbadger.com/badges/image/isaudits/kali:msf.svg)](https://microbadger.com/images/isaudits/kali:msf)
+[![](https://images.microbadger.com/badges/version/isaudits/kali:msf.svg)](https://microbadger.com/images/isaudits/kali:msf)
 
 Docker implementation of Kali Linux with installed toolset
 
