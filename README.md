@@ -24,7 +24,7 @@ pull main image only:
     
 pull full metasploit image only:
 
-    docker pull isaudits/msf:msf
+    docker pull isaudits/kali:msf
     
 
 ### Aliases
