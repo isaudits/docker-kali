@@ -28,6 +28,7 @@ ARG TOOLS_KALI="crackmapexec \
                 nfs-common \
                 nikto \
                 nmap \
+                onesixtyone \
                 recon-ng \
                 rpcbind \
                 snmpcheck \
