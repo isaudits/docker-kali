@@ -29,6 +29,7 @@ ARG TOOLS_KALI="crackmapexec \
                 nikto \
                 nmap \
                 onesixtyone \
+                python3-scrapy \
                 recon-ng \
                 rpcbind \
                 snmpcheck \
