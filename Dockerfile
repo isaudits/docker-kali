@@ -32,6 +32,7 @@ ARG TOOLS_KALI="crackmapexec \
                 onesixtyone \
                 python3-scrapy \
                 recon-ng \
+                responder \
                 rpcbind \
                 snmpcheck \
                 sqlmap \
