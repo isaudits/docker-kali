@@ -22,52 +22,52 @@ else
 fi
 
 # Just type kali for a command prompt!
-alias kali='$kali_command'
+alias kali="$kali_command"
 
 # These may be installed locally
-#alias nslookup='$kali_command nslookup'
-#alias whois='$kali_command whois'
-#alias nmap='$kali_command nmap'
+#alias nslookup="$kali_command nslookup"
+#alias whois="$kali_command whois"
+#alias nmap="$kali_command nmap"
 
 # Kali apps
-alias crackmapexec='$kali_command crackmapexec'
-alias dirb='$kali_command dirb'
-alias dnsenum='$kali_command dnsenum'
-alias dnsmap='$kali_command dnsmap'
-alias dnsrecon='$kali_command dnsrecon'
-alias enum4linux='$kali_command enum4linux'
-alias fierce='$kali_command fierce'
-alias hydra='$kali_command hydra'
-alias ike-scan='$kali_command ike-scan'
-alias iker='$kali_command iker'
-alias impacket-GetUserSPNs='$kali_command impacket-GetUserSPNs'
-alias impacket-netview='$kali_command impacket-netview'
-alias impacket-ntlmrelayx='$kali_command impacket-ntlmrelayx'
-alias ntlmrelayx='$kali_command impacket-ntlmrelayx'
-alias impacket-rpcdump='$kali_command impacket-rpcdump'
-alias impacket-samrdump='$kali_command impacket-samrdump'
-alias samrdump='$kali_command impacket-samrdump'
-alias impacket-secretsdump='$kali_command impacket-secretsdump'
-alias impacket-smbserver='$kali_command impacket-smbserver'
-alias impacket-ticketer='$kali_command impacket-ticketer'
-alias impacket-wmiexec='$kali_command impacket-wmiexec'
-alias joomscan='$kali_command joomscan'
-#alias msfconsole='$kali_command msfconsole'
-#alias msfvenom='$kali_command msfvenom'
-alias nbtscan='$kali_command nbtscan'
-alias nikto='$kali_command nikto'
-alias onesixtyone='$kali_command onesixtyone'
-alias recon-ng='$kali_command recon-ng'
-alias responder='$kali_command responder'
-alias snmpcheck='$kali_command snmp-check'
-alias sqlmap='$kali_command sqlmap'
-alias sslscan='$kali_command sslscan'
-alias sslyze='$kali_command sslyze'
-alias tcptraceroute='$kali_command tcptraceroute'
-alias theharvester='$kali_command theharvester'
-alias webshag-cli='$kali_command webshag-cli'
-alias whatweb='$kali_command whatweb'
-alias wpscan='$kali_command wpscan'
+alias crackmapexec="$kali_command crackmapexec"
+alias dirb="$kali_command dirb"
+alias dnsenum="$kali_command dnsenum"
+alias dnsmap="$kali_command dnsmap"
+alias dnsrecon="$kali_command dnsrecon"
+alias enum4linux="$kali_command enum4linux"
+alias fierce="$kali_command fierce"
+alias hydra="$kali_command hydra"
+alias ike-scan="$kali_command ike-scan"
+alias iker="$kali_command iker"
+alias impacket-GetUserSPNs="$kali_command impacket-GetUserSPNs"
+alias impacket-netview="$kali_command impacket-netview"
+alias impacket-ntlmrelayx="$kali_command impacket-ntlmrelayx"
+alias ntlmrelayx="$kali_command impacket-ntlmrelayx"
+alias impacket-rpcdump="$kali_command impacket-rpcdump"
+alias impacket-samrdump="$kali_command impacket-samrdump"
+alias samrdump="$kali_command impacket-samrdump"
+alias impacket-secretsdump="$kali_command impacket-secretsdump"
+alias impacket-smbserver="$kali_command impacket-smbserver"
+alias impacket-ticketer="$kali_command impacket-ticketer"
+alias impacket-wmiexec="$kali_command impacket-wmiexec"
+alias joomscan="$kali_command joomscan"
+#alias msfconsole="$kali_command msfconsole"
+#alias msfvenom="$kali_command msfvenom"
+alias nbtscan="$kali_command nbtscan"
+alias nikto="$kali_command nikto"
+alias onesixtyone="$kali_command onesixtyone"
+alias recon-ng="$kali_command recon-ng"
+alias responder="$kali_command responder"
+alias snmpcheck="$kali_command snmp-check"
+alias sqlmap="$kali_command sqlmap"
+alias sslscan="$kali_command sslscan"
+alias sslyze="$kali_command sslyze"
+alias tcptraceroute="$kali_command tcptraceroute"
+alias theharvester="$kali_command theharvester"
+alias webshag-cli="$kali_command webshag-cli"
+alias whatweb="$kali_command whatweb"
+alias wpscan="$kali_command wpscan"
 
 
 
