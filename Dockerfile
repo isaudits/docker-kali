@@ -72,22 +72,7 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/scripts/.git && \
     ln -s /opt/scripts/iker.py /usr/bin/iker && \
     ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
-    ln -s /opt/scripts/externalIP /usr/bin/externalIP && \
-    git clone --depth=1 https://github.com/wereallfeds/webshag /opt/webshag && \
-    rm -rf /opt/webshag/.git && \
-    cd /opt/webshag/ && \
-    echo -e "\n" | python setup.linux.py && \
-    ln -s /opt/webshag/webshag_cli.py /usr/bin/webshag-cli
-
-#RUN git clone --depth=1 -b dev https://github.com/DedSecInside/TorBot /opt/TorBot && \
-#    cd /opt/TorBot/ && \
-#    rm -rf .git && \
-#    apt-get install -y python3-pyqt5 tor && \
-#    pip3 install -r requirements.txt && \
-#    ./install.sh && \
-#    apt-get autoremove -y && \
-#    apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
+    ln -s /opt/scripts/externalIP /usr/bin/externalIP
 
 #Bash completion
 RUN printf "alias ll='ls $LS_OPTIONS -l'\nalias l='ls $LS_OPTIONS -lA'\n\n# enable bash completion in interactive shells\nif [ -f /etc/bash_completion ] && ! shopt -oq posix; then\n    . /etc/bash_completion\nfi\n" > /root/.bashrc

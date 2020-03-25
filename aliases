@@ -65,7 +65,6 @@ alias sslscan="$kali_command sslscan"
 alias sslyze="$kali_command sslyze"
 alias tcptraceroute="$kali_command tcptraceroute"
 alias theharvester="$kali_command theharvester"
-alias webshag-cli="$kali_command webshag-cli"
 alias whatweb="$kali_command whatweb"
 alias wpscan="$kali_command wpscan"
 
