@@ -19,6 +19,7 @@ ARG TOOLS_KALI="crackmapexec \
                 dnsmap \
                 dnsrecon \
                 enum4linux \
+                exploitdb \
                 fierce \
                 hydra \
                 ike-scan \
