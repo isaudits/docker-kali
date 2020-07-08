@@ -9,6 +9,7 @@ ARG TOOLS_BASE="dnsutils \
                 git \
                 curl \
                 net-tools \
+                iputils-ping \
                 pciutils \
                 bash-completion"
 
