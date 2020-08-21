@@ -13,6 +13,7 @@ ARG TOOLS_BASE="dnsutils \
                 iputils-ping \
                 pciutils \
                 zsh \
+                python2"
 
 #NOTE - metasploit installed in later build; not included in base
 ARG TOOLS_KALI="crackmapexec \
