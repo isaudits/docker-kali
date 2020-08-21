@@ -6,12 +6,13 @@ ARG BUILD_DATE
 ARG VCS_REF
 
 ARG TOOLS_BASE="dnsutils \
+                wget \
                 git \
                 curl \
                 net-tools \
                 iputils-ping \
                 pciutils \
-                bash-completion"
+                zsh \
 
 #NOTE - metasploit installed in later build; not included in base
 ARG TOOLS_KALI="crackmapexec \
@@ -76,12 +77,12 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
     ln -s /opt/scripts/externalIP /usr/bin/externalIP
 
-#Bash completion
-RUN printf "alias ll='ls $LS_OPTIONS -l'\nalias l='ls $LS_OPTIONS -lA'\n\n# enable bash completion in interactive shells\nif [ -f /etc/bash_completion ] && ! shopt -oq posix; then\n    . /etc/bash_completion\nfi\n" > /root/.bashrc
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
+    chsh -s $(which zsh)
 
 RUN mkdir /data
 
-CMD ["/bin/bash"]
+CMD ["/bin/zsh"]
 
 LABEL org.label-schema.build-date=$BUILD_DATE \
       org.label-schema.vcs-url="https://github.com/isaudits/docker-kali" \
