@@ -29,6 +29,10 @@ alias kali="$kali_command"
 #alias whois="$kali_command whois"
 #alias nmap="$kali_command nmap"
 
+# Metasploit
+#alias msfconsole="$kali_command msfconsole"
+#alias msfvenom="$kali_command msfvenom"
+
 # Kali apps
 alias crackmapexec="$kali_command crackmapexec"
 alias dirb="$kali_command dirb"
@@ -52,8 +56,6 @@ alias impacket-smbserver="$kali_command impacket-smbserver"
 alias impacket-ticketer="$kali_command impacket-ticketer"
 alias impacket-wmiexec="$kali_command impacket-wmiexec"
 alias joomscan="$kali_command joomscan"
-#alias msfconsole="$kali_command msfconsole"
-#alias msfvenom="$kali_command msfvenom"
 alias nbtscan="$kali_command nbtscan"
 alias nikto="$kali_command nikto"
 alias onesixtyone="$kali_command onesixtyone"
