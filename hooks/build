@@ -9,3 +9,7 @@ docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
 docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              -t isaudits/kali:msf -f Dockerfile.msf .
+
+docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+             --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+             -t isaudits/kali:xfce -f Dockerfile.xfce .

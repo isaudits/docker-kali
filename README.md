@@ -10,9 +10,10 @@ Docker implementation of Kali Linux with installed toolset
 
 ## Description
 
-This image has 2 build tags with separate Dockerfiles:
+This image has 3 build tags with separate Dockerfiles:
 * base / latest - main image based upon official Kali Linux docker image with our custom toolset (excluding Metasploit) installed
 * msf - same as base image with metasploit also installed (larger)
+* xfce - same as msf image with xfce desktop and xrdp installed (even larger)
 
 If you are viewing this on docker hub, clone the full repo at https://github.com/isaudits/docker-kali
 to get the launcher scripts and alias files described below.

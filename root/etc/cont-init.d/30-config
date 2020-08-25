@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+# NOTE - based on https://github.com/linuxserver/docker-webgrabplus/blob/master/root/etc/cont-init.d/30-config
+
+mkdir -p -m 750 /var/run/sshd
+
+mkdir -p /var/run/xrdp || exit 1
+chown root:xrdp /var/run/xrdp || exit 1
+chmod 2775 /var/run/xrdp || exit 1
+
+mkdir -p /var/run/xrdp/sockdir || exit 1
+chown root:xrdp /var/run/xrdp/sockdir || exit 1
+chmod 3777 /var/run/xrdp/sockdir || exit 1
+
+#touch /root/.Xauthority
+#chmod 600 /root/.Xauthority
+
+#chown -R abc:abc /config
+#chown -R abc:abc /defaults

@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+#echo "Fixing permissions for non-root use"
+#
+#chown -R abc:abc /config
+#chown -R abc:abc /defaults
