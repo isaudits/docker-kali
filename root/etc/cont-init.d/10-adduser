@@ -11,4 +11,4 @@
 
 echo "Setting root user environment..."
 
-echo "root:${ROOTPASS:-toor}" | chpasswd
+echo "root:${KALI_ROOTPASS:-toor}" | chpasswd
