@@ -7,9 +7,9 @@ ARG S6_OVERLAY_VERSION=2.0.0.1
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends openssh-server xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce alien legion && \
-    wget https://nmap.org/dist/zenmap-7.80-1.noarch.rpm && \
-    alien zenmap-7.80-1.noarch.rpm && \
-    dpkg -i zenmap_7.80-2_all.deb && \
+    wget https://nmap.org/dist/zenmap-7.90-1.noarch.rpm && \
+    alien zenmap-7.90-1.noarch.rpm && \
+    dpkg -i zenmap_7.90-2_all.deb && \
     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-6_amd64.deb && \
     apt-get install -y --no-install-recommends python python-cairo python-gobject-2 && \
     dpkg -i python-gtk2_2.24.0-6_amd64.deb && \
