@@ -85,9 +85,12 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
     ln -s /opt/scripts/externalIP /usr/bin/externalIP
 
+# Default shell and some tweaks
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
-    chsh -s $(which zsh)
+    chsh -s $(which zsh) && \
+    touch ~/.hushlogin && \
+    git config pull.rebase false
 
-RUN mkdir /data
+RUN mkdir /data 
 
 CMD ["/bin/zsh"]
