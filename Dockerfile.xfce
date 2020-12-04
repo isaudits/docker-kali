@@ -4,19 +4,21 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ARG S6_OVERLAY_VERSION=2.0.0.1
 
+# Desktop and RDP access
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends openssh-server mosh xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce alien && \
+    apt-get install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# SECFORCE Sparta
 RUN git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
     rm -rf /opt/sparta/.git && \
     ln -s /opt/sparta/sparta.py /usr/local/sbin/sparta
 
-# zenmap
+# Zenmap
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends python && \
+    apt-get install -y --no-install-recommends alien python && \
 
     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pycairo/python-cairo_1.16.2-2ubuntu2_amd64.deb && \
     dpkg -i python-cairo_1.16.2-2ubuntu2_amd64.deb && \

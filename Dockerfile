@@ -1,13 +1,13 @@
 FROM kalilinux/kali-rolling
 
+ARG BUILD_DATE
+ARG VCS_REF
+
 LABEL maintainer="mcjon3z" \
     org.label-schema.build-date=$BUILD_DATE \
     org.label-schema.vcs-url="https://github.com/isaudits/docker-kali" \
     org.label-schema.vcs-ref=$VCS_REF \
     org.label-schema.schema-version="1.0.0-rc1"
-
-ARG BUILD_DATE
-ARG VCS_REF
 
 ARG TOOLS_BASE="dnsutils \
                 wget \
@@ -16,6 +16,8 @@ ARG TOOLS_BASE="dnsutils \
                 net-tools \
                 iputils-ping \
                 pciutils \
+                openssh-server \
+                mosh \
                 zsh \
                 python \
                 python2"
