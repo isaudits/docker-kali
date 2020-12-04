@@ -12,9 +12,15 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # SECFORCE Sparta
-RUN git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 wkhtmltopdf ldap-utils rwho rsh-client x11-apps finger hydra && \
+    git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
     rm -rf /opt/sparta/.git && \
-    ln -s /opt/sparta/sparta.py /usr/local/sbin/sparta
+    echo 'cd /opt/sparta && python3 sparta.py' > /usr/local/sbin/sparta && \
+    chmod 755 /usr/local/sbin/sparta && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Zenmap
 RUN apt-get update && \
