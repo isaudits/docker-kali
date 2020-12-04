@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Disable desktop wallpaper
+xfconf-query  \
+  --channel xfce4-desktop \
+  --property /backdrop/screen0/monitorrdp0/workspace0/image-style \
+  --set 0
