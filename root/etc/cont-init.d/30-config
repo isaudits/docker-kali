@@ -12,6 +12,9 @@ mkdir -p /var/run/xrdp/sockdir || exit 1
 chown root:xrdp /var/run/xrdp/sockdir || exit 1
 chmod 3777 /var/run/xrdp/sockdir || exit 1
 
+sed -i 's/SyslogLevel=DEBUG/SyslogLevel=WARN/' /etc/xrdp/xrdp.ini
+sed -i 's/SyslogLevel=DEBUG/SyslogLevel=WARN/' /etc/xrdp/sesman.ini
+
 #touch /root/.Xauthority
 #chmod 600 /root/.Xauthority
 
