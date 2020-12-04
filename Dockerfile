@@ -1,6 +1,10 @@
 FROM kalilinux/kali-rolling
 
-LABEL maintainer="mcjon3z"
+LABEL maintainer="mcjon3z" \
+    org.label-schema.build-date=$BUILD_DATE \
+    org.label-schema.vcs-url="https://github.com/isaudits/docker-kali" \
+    org.label-schema.vcs-ref=$VCS_REF \
+    org.label-schema.schema-version="1.0.0-rc1"
 
 ARG BUILD_DATE
 ARG VCS_REF
@@ -13,6 +17,7 @@ ARG TOOLS_BASE="dnsutils \
                 iputils-ping \
                 pciutils \
                 zsh \
+                python \
                 python2"
 
 #NOTE - metasploit installed in later build; not included in base
@@ -84,8 +89,3 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master
 RUN mkdir /data
 
 CMD ["/bin/zsh"]
-
-LABEL org.label-schema.build-date=$BUILD_DATE \
-      org.label-schema.vcs-url="https://github.com/isaudits/docker-kali" \
-      org.label-schema.vcs-ref=$VCS_REF \
-      org.label-schema.schema-version="1.0.0-rc1"

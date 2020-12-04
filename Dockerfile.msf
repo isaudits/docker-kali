@@ -5,8 +5,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends metasploit-framework && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-    
-RUN service postgresql start && \
+    rm -rf /var/lib/apt/lists/* &&\
+    service postgresql start && \
     msfdb init && \
     service postgresql stop
