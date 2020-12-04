@@ -5,20 +5,42 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG S6_OVERLAY_VERSION=2.0.0.1
 
 RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends openssh-server xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce alien legion && \
-    # wget https://nmap.org/dist/zenmap-7.90-1.noarch.rpm && \
-    # alien zenmap-7.90-1.noarch.rpm && \
-    # dpkg -i zenmap_7.90-2_all.deb && \
-    # wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-6_amd64.deb && \
-    # apt-get install -y --no-install-recommends python python-cairo python-gobject-2 && \
-    # dpkg -i python-gtk2_2.24.0-6_amd64.deb && \
-    # rm zenmap* && \
-    # rm python-gtk* && \
+    apt-get install -y --no-install-recommends openssh-server mosh xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce alien && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    wget https://github.com/just-containers/s6-overlay/releases/download/v$S6_OVERLAY_VERSION/s6-overlay-amd64.tar.gz && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
+    rm -rf /opt/sparta/.git && \
+    ln -s /opt/sparta/sparta.py /usr/local/sbin/sparta
+
+# zenmap
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends python && \
+
+    wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pycairo/python-cairo_1.16.2-2ubuntu2_amd64.deb && \
+    dpkg -i python-cairo_1.16.2-2ubuntu2_amd64.deb && \
+    rm python-cairo* && \
+
+    wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygobject-2/python-gobject-2_2.28.6-14ubuntu1_amd64.deb && \
+    dpkg -i python-gobject-2_2.28.6-14ubuntu1_amd64.deb && \
+    rm python-gobject* && \
+
+    wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-6_amd64.deb && \
+    dpkg -i python-gtk2_2.24.0-6_amd64.deb && \
+    rm python-gtk* && \
+    
+    wget https://nmap.org/dist/zenmap-7.90-1.noarch.rpm && \
+    alien zenmap-7.90-1.noarch.rpm && \
+    dpkg -i zenmap_7.90-2_all.deb && \
+    rm zenmap* && \
+    
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Add S6 overlay
+RUN wget https://github.com/just-containers/s6-overlay/releases/download/v$S6_OVERLAY_VERSION/s6-overlay-amd64.tar.gz && \
     tar xzf s6-overlay-amd64.tar.gz -C / && \
     rm -f s6-overlay-amd64.tar.gz
 
