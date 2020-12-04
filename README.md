@@ -6,6 +6,9 @@
 [![](https://images.microbadger.com/badges/image/isaudits/kali:msf.svg)](https://microbadger.com/images/isaudits/kali:msf)
 [![](https://images.microbadger.com/badges/version/isaudits/kali:msf.svg)](https://microbadger.com/images/isaudits/kali:msf)
 
+[![](https://images.microbadger.com/badges/image/isaudits/kali:xfce.svg)](https://microbadger.com/images/isaudits/kali:xfce)
+[![](https://images.microbadger.com/badges/version/isaudits/kali:xfce.svg)](https://microbadger.com/images/isaudits/kali:xfce)
+
 Docker implementation of Kali Linux with installed toolset
 
 ## Description
