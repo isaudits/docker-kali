@@ -34,8 +34,8 @@ RUN apt-get update && \
     dpkg -i python-gobject-2_2.28.6-14ubuntu1_amd64.deb && \
     rm python-gobject* && \
 
-    wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-6_amd64.deb && \
-    dpkg -i python-gtk2_2.24.0-6_amd64.deb && \
+    wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-5.1ubuntu2_amd64.deb && \
+    dpkg -i python-gtk2_2.24.0-5.1ubuntu2_amd64.deb && \
     rm python-gtk* && \
     
     wget https://nmap.org/dist/zenmap-7.90-1.noarch.rpm && \
