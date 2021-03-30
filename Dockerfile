@@ -14,6 +14,8 @@ ARG TOOLS_BASE="dnsutils \
                 git \
                 curl \
                 net-tools \
+                traceroute \
+                tcptraceroute \
                 iputils-ping \
                 pciutils \
                 openssh-server \
