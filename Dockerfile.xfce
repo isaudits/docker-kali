@@ -24,7 +24,12 @@ RUN apt-get update && \
 
 # Zenmap
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends alien python && \
+    apt-get install -y --no-install-recommends python libgtk2.0-0 && \
+    cd /tmp && \
+
+    wget http://archive.ubuntu.com/ubuntu/pool/main/a/alien/alien_8.90_all.deb && \
+    apt install -y /tmp/alien_8.90_all.deb && \
+    rm alien* && \
 
     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pycairo/python-cairo_1.16.2-2ubuntu2_amd64.deb && \
     dpkg -i python-cairo_1.16.2-2ubuntu2_amd64.deb && \
@@ -38,11 +43,11 @@ RUN apt-get update && \
     dpkg -i python-gtk2_2.24.0-5.1ubuntu2_amd64.deb && \
     rm python-gtk* && \
     
-    wget https://nmap.org/dist/zenmap-7.90-1.noarch.rpm && \
-    alien zenmap-7.90-1.noarch.rpm && \
-    dpkg -i zenmap_7.90-2_all.deb && \
+    wget https://nmap.org/dist/zenmap-7.91-1.noarch.rpm && \
+    alien -i zenmap-7.91-1.noarch.rpm && \
     rm zenmap* && \
     
+    apt-get remove -y alien && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
