@@ -21,7 +21,7 @@ ARG TOOLS_BASE="dnsutils \
                 openssh-server \
                 mosh \
                 zsh \
-                python \
+                python3 \
                 python2"
 
 #NOTE - metasploit installed in later build; not included in base
