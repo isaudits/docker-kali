@@ -24,7 +24,7 @@ RUN apt-get update && \
 
 # Zenmap
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends python libgtk2.0-0 && \
+    apt-get install -y --no-install-recommends libgtk2.0-0 && \
     cd /tmp && \
 
     wget http://archive.ubuntu.com/ubuntu/pool/main/a/alien/alien_8.90_all.deb && \
