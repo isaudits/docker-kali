@@ -38,7 +38,7 @@ ARG TOOLS_KALI="crackmapexec \
                 impacket-scripts \
                 joomscan \
                 nbtscan \
-                netcat \
+                netcat-traditional \
                 nfs-common \
                 nikto \
                 nmap \
