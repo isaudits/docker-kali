@@ -50,17 +50,23 @@ ARG TOOLS_KALI="crackmapexec \
                 snmpcheck \
                 sqlmap \
                 sslscan \
-                sslyze \
                 theharvester \
                 tcptraceroute \
                 whatweb \
                 whois \
                 wpscan"
 
+# These fail to install on ARM version due to dependency issues
+ARG TOOLS_linux/amd64="sslyze"
+
+# Dummy install just so we don't pass an empty string to the install command
+ARG TOOLS_linux/arm64="dnsutils"
+
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends $TOOLS_BASE && \
     apt-get install -y --no-install-recommends $TOOLS_KALI && \
+    apt-get install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
