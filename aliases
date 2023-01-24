@@ -68,7 +68,7 @@ alias sqlmap="$kali_command sqlmap"
 alias sslscan="$kali_command sslscan"
 alias sslyze="$kali_command sslyze"
 alias tcptraceroute="$kali_command tcptraceroute"
-alias theharvester="$kali_command theHarvester"
+alias theHarvester="$kali_command theHarvester"
 alias whatweb="$kali_command whatweb"
 alias wpscan="$kali_command wpscan"
 
