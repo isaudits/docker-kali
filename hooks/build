@@ -2,17 +2,17 @@
 set -ueo pipefail
 
 # stolen from https://medium.com/microscaling-systems/labelling-automated-builds-on-docker-hub-f3d073fb8e1
-docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              --platform linux/amd64,linux/arm64 \
              --pull -t isaudits/kali:base -t isaudits/kali:latest .
              
-docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              --platform linux/amd64,linux/arm64 \
              -t isaudits/kali:msf -f Dockerfile.msf .
 
-docker build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              --platform linux/amd64,linux/arm64 \
              -t isaudits/kali:xfce -f Dockerfile.xfce .
