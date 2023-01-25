@@ -1,7 +1,4 @@
 #!/bin/bash
 set -ueo pipefail
 
-docker push isaudits/kali:base
-docker push isaudits/kali:msf
-docker push isaudits/kali:xfce
-docker push isaudits/kali:latest
+#Dummy push file to override docker hub push hook - buildx is handling image push
