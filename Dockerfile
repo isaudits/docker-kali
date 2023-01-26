@@ -22,6 +22,7 @@ ARG TOOLS_BASE="dnsutils \
                 mosh \
                 zsh \
                 python3 \
+                python3-libnmap \
                 python2"
 
 #NOTE - metasploit installed in later build; not included in base
@@ -91,7 +92,10 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/scripts/.git && \
     ln -s /opt/scripts/iker.py /usr/bin/iker && \
     ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
-    ln -s /opt/scripts/externalIP /usr/bin/externalIP
+    ln -s /opt/scripts/externalIP /usr/bin/externalIP && \
+    git clone --depth=1 https://github.com/isaudits/autoenum /opt/autoenum && \
+    rm -rf /opt/autoenum/.git && \
+    ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
