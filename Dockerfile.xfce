@@ -22,39 +22,16 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Zenmap - temporarliy disabled since previous manual install options are no longer working :(
-# RUN apt-get update && \
-#     apt-get install -y --no-install-recommends python-pip libgtk2.0-0 && \
-#     cd /tmp && \
-
-#     wget http://archive.ubuntu.com/ubuntu/pool/main/a/alien/alien_8.90_all.deb && \
-#     apt install -y /tmp/alien_8.90_all.deb && \
-#     rm alien* && \
-
-#     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pycairo/python-cairo_1.16.2-2ubuntu2_amd64.deb && \
-#     dpkg -i python-cairo_1.16.2-2ubuntu2_amd64.deb && \
-#     rm python-cairo* && \
-
-#     wget http://archive.ubuntu.com/ubuntu/pool/main/libf/libffi/libffi7_3.3-4_amd64.deb && \
-#     dpkg -i libffi7_3.3-4_amd64.deb && \
-#     rm libffi7* && \
-
-#     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygobject-2/python-gobject-2_2.28.6-14ubuntu1_amd64.deb && \
-#     dpkg -i python-gobject-2_2.28.6-14ubuntu1_amd64.deb && \
-#     rm python-gobject* && \
-
-#     wget http://archive.ubuntu.com/ubuntu/pool/universe/p/pygtk/python-gtk2_2.24.0-5.1ubuntu2_amd64.deb && \
-#     dpkg -i python-gtk2_2.24.0-5.1ubuntu2_amd64.deb && \
-#     rm python-gtk* && \
-
-#     wget https://nmap.org/dist/zenmap-7.92-1.noarch.rpm && \
-#     alien -i zenmap-7.92-1.noarch.rpm && \
-#     rm zenmap* && \
-
-#     apt-get remove -y alien python-pip && \
-#     apt-get autoremove -y && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
+# Zenmap
+RUN apt-get update && \ 
+    apt install -y alien python3-gi python3-cairo gir1.2-gtk-3.0 && \
+    cd /tmp && \
+    wget https://nmap.org/dist/zenmap-7.94-1.noarch.rpm && \
+    alien -i zenmap-7.94-1.noarch.rpm && \
+    apt-get remove -y alien && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Add S6 overlay
 RUN wget https://github.com/just-containers/s6-overlay/releases/download/v$S6_OVERLAY_VERSION/s6-overlay-amd64.tar.gz && \
