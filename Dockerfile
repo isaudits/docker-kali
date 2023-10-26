@@ -23,7 +23,8 @@ ARG TOOLS_BASE="dnsutils \
                 zsh \
                 python3 \
                 python3-libnmap \
-                python2"
+                python2 \
+                thefuck"
 
 #NOTE - metasploit installed in later build; not included in base
 ARG TOOLS_KALI="crackmapexec \
