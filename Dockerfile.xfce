@@ -35,7 +35,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Add S6 overlay
-RUN [ "${TARGETARCH}" == "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s6-overlay-amd64.tar.gz"; \
+RUN [ "${TARGETARCH}" = "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s6-overlay-amd64.tar.gz"; \
     wget https://github.com/just-containers/s6-overlay/releases/download/v$S6_OVERLAY_VERSION/${FILE} && \
     #tar xzf s6-overlay-amd64.tar.gz -C / && \
     tar xzf s6-overlay-amd64.tar.gz -C / --exclude="./bin" && \
