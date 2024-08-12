@@ -35,6 +35,7 @@ alias kali-xfce="$kali_command:xfce"
 #alias msfvenom="$kali_command msfvenom"
 
 # Kali apps
+alias bbot="$kali_command bbot"
 alias crackmapexec="$kali_command crackmapexec"
 alias dirb="$kali_command dirb"
 alias dnsenum="$kali_command dnsenum"

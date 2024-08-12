@@ -6,32 +6,32 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG S6_OVERLAY_VERSION=2.2.0.3
 
 # Desktop and RDP access
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce && \
-    apt-get autoremove -y && \
-    apt-get clean && \
+RUN apt update && \
+    apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce && \
+    apt autoremove -y && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
 # SECFORCE Sparta
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 wkhtmltopdf ldap-utils rwho rsh-client x11-apps finger hydra && \
+RUN apt update && \
+    apt install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 wkhtmltopdf ldap-utils rwho x11-apps finger hydra && \
     git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
     rm -rf /opt/sparta/.git && \
     echo 'cd /opt/sparta && python3 sparta.py' > /usr/local/sbin/sparta && \
     chmod 755 /usr/local/sbin/sparta && \
-    apt-get autoremove -y && \
-    apt-get clean && \
+    apt autoremove -y && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Zenmap
-RUN apt-get update && \ 
+RUN apt update && \ 
     apt install -y alien python3-gi python3-cairo gir1.2-gtk-3.0 && \
     cd /tmp && \
-    wget https://nmap.org/dist/zenmap-7.94-1.noarch.rpm && \
-    alien -i zenmap-7.94-1.noarch.rpm && \
-    apt-get remove -y alien && \
-    apt-get autoremove -y && \
-    apt-get clean && \
+    wget https://nmap.org/dist/zenmap-7.95-1.noarch.rpm && \
+    alien -i zenmap-7.95-1.noarch.rpm && \
+    apt remove -y alien && \
+    apt autoremove -y && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/*
 
 # Add S6 overlay

@@ -11,6 +11,7 @@ LABEL maintainer="mcjon3z" \
 
 ARG TOOLS_BASE="dnsutils \
                 wget \
+                gcc \
                 git \
                 curl \
                 net-tools \
@@ -21,8 +22,10 @@ ARG TOOLS_BASE="dnsutils \
                 openssh-server \
                 mosh \
                 zsh \
-                python3 \
+                python3-dev \
                 python3-libnmap \
+                python3-pip \
+                python3-venv \
                 python2 \
                 thefuck"
 
@@ -64,17 +67,20 @@ ARG TOOLS_linux/amd64="sslyze"
 # Dummy install just so we don't pass an empty string to the install command
 ARG TOOLS_linux/arm64="dnsutils"
 
-ARG TOOLS_PIP = "bbot"
+ARG TOOLS_PIP="pipx"
 
-RUN apt-get update && \
-    apt-get dist-upgrade -y && \
-    apt-get install -y --no-install-recommends $TOOLS_BASE && \
-    apt-get install -y --no-install-recommends $TOOLS_KALI && \
-    apt-get install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
-    apt-get autoremove -y && \
-    apt-get clean && \
+ARG TOOLS_PIPX="bbot"
+
+RUN apt update && \
+    apt dist-upgrade -y && \
+    apt install -y --no-install-recommends $TOOLS_BASE && \
+    apt install -y --no-install-recommends $TOOLS_KALI && \
+    apt install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
+    apt autoremove -y && \
+    apt clean && \
     rm -rf /var/lib/apt/lists/* && \
-    pip install $TOOLS_PIP
+    pip3 install --no-cache-dir $TOOLS_PIP && \
+    pipx install $TOOLS_PIPX
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
     rm -rf /opt/SecLists/.git && \
