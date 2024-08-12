@@ -64,6 +64,8 @@ ARG TOOLS_linux/amd64="sslyze"
 # Dummy install just so we don't pass an empty string to the install command
 ARG TOOLS_linux/arm64="dnsutils"
 
+ARG TOOLS_PIP = "bbot"
+
 RUN apt-get update && \
     apt-get dist-upgrade -y && \
     apt-get install -y --no-install-recommends $TOOLS_BASE && \
@@ -71,7 +73,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    pip install $TOOLS_PIP
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
     rm -rf /opt/SecLists/.git && \
