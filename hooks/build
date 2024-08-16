@@ -1,17 +1,32 @@
 #!/bin/bash
 set -ueo pipefail
 
-docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
-             --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-             --platform linux/amd64,linux/arm64 \
-             --push -t isaudits/kali:base -t isaudits/kali:latest .
+# docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+#              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+#              --platform linux/amd64,linux/arm64 \
+#              --push -t isaudits/kali:base -t isaudits/kali:latest .
              
-docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
-             --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
-             --platform linux/amd64,linux/arm64 \
-             --push -t isaudits/kali:msf -f Dockerfile.msf .
+# docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+#              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+#              --platform linux/amd64,linux/arm64 \
+#              --push -t isaudits/kali:msf -f Dockerfile.msf .
+
+# docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+#              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+#              --platform linux/amd64,linux/arm64 \
+#              --push -t isaudits/kali:xfce -f Dockerfile.xfce .
+
+
+# This splits the comma separated tags into an array, allowing multiple tags to be passed to the build command
+IFS=',' read -ra tags <<< "$DOCKER_TAG"
+TAG_COMMAND=""
+
+for tag in "${tags[@]}"
+do
+    TAG_COMMAND="$TAG_COMMAND -t $DOCKER_REPO:$tag"
+done
 
 docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              --platform linux/amd64,linux/arm64 \
-             --push -t isaudits/kali:xfce -f Dockerfile.xfce .
+             --push -f $DOCKERFILE_PATH -t $TAG_COMMAND .
