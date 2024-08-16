@@ -26,9 +26,7 @@ do
     TAG_COMMAND="$TAG_COMMAND -t $DOCKER_REPO:$tag"
 done
 
-echo $TAG_COMMAND
-
 docker buildx build --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
              --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
              --platform linux/amd64,linux/arm64 \
-             --push -f $DOCKERFILE_PATH -t $TAG_COMMAND .
+             --push -f $DOCKERFILE_PATH $TAG_COMMAND .
