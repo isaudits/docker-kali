@@ -1,6 +1,5 @@
 name: Docker
 # https://docs.docker.com/build/ci/github-actions/multi-platform/
-# NOTE - not using separate runners because we need to build in sequence, not parallel
 
 # In addition to defining DOCKERHUB_REPO and GHCR_REPO, must set up the following secrets / variables in github repo / organization: 
 # variable: DOCKERHUB_USERNAME
@@ -9,16 +8,49 @@ name: Docker
 on:
   push:
     branches: [ master ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+  pull_request:
+    branches: [ master ]
 
 env:
   DOCKERHUB_REPO: isaudits/kali
   GHCR_REPO: ghcr.io/isaudits/docker-kali
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-base:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+            platform_tag: linux-amd64
+          - runner: ubuntu-24.04-arm # ubuntu-latest currently does not support arm64: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+            platform: linux/arm64
+            platform_tag: linux-arm64
 
     steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=sha
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -33,31 +65,353 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: base, latest
+          outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
+          cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform_tag }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-base:
+    runs-on: ubuntu-latest
+    needs:
+      - build-base
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push - base
-        uses: docker/build-push-action@v6
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: base, latest
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push - msf
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.GHCR_REPO }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GHCR_REPO }}:${{ steps.meta.outputs.version }}
+
+
+  build-msf:
+    runs-on: ${{ matrix.runner }}
+    needs: 
+      - merge-base
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+            platform_tag: linux-amd64
+          - runner: ubuntu-24.04-arm # ubuntu-latest currently does not support arm64: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+            platform: linux/arm64
+            platform_tag: linux-arm64
+
+    steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=sha
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push by digest
+        id: build
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: msf
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
           dockerfile: Dockerfile.msf
+          tags: msf
+          outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
+          cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
 
-      - name: Build and push - xfce
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform_tag }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-msf:
+    runs-on: ubuntu-latest
+    needs:
+      - build-msf
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.GHCR_REPO }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GHCR_REPO }}:${{ steps.meta.outputs.version }}
+
+
+  build-xfce:
+    runs-on: ${{ matrix.runner }}
+    needs:
+      - merge-msf
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+            platform_tag: linux-amd64
+          - runner: ubuntu-24.04-arm # ubuntu-latest currently does not support arm64: https://docs.github.com/en/actions/using-github-hosted-runners/using-github-hosted-runners/about-github-hosted-runners#standard-github-hosted-runners-for-public-repositories
+            platform: linux/arm64
+            platform_tag: linux-arm64
+
+    steps:
+      - name: Prepare
+        run: |
+          platform=${{ matrix.platform }}
+          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=sha
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push by digest
+        id: build
         uses: docker/build-push-action@v6
         with:
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: xfce
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
           dockerfile: Dockerfile.xfce
+          tags: xfce
+          outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
+          cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
+
+      - name: Export digest
+        run: |
+          mkdir -p ${{ runner.temp }}/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform_tag }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-xfce:
+    runs-on: ubuntu-latest
+    needs:
+      - build-xfce
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.DOCKERHUB_REPO }}
+            ${{ env.GHCR_REPO }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.GHCR_REPO }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.DOCKERHUB_REPO }}:${{ steps.meta.outputs.version }}
+          docker buildx imagetools inspect ${{ env.GHCR_REPO }}:${{ steps.meta.outputs.version }}
