@@ -18,7 +18,7 @@ env:
   DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   GHCR_REPO: ghcr.io/isaudits/docker-kali
-  GHCR_USERNAME: isaudits
+  GHCR_USERNAME: ${{ github.actor }}
   GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
