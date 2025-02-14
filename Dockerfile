@@ -11,6 +11,7 @@ LABEL maintainer="mcjon3z" \
 
 ARG TOOLS_BASE="dnsutils \
                 wget \
+                # remove gcc after pip packages are installed
                 gcc \
                 git \
                 curl \
@@ -22,11 +23,14 @@ ARG TOOLS_BASE="dnsutils \
                 openssh-server \
                 mosh \
                 zsh \
-                python3-dev \
+                python3 \
+                # remove python3-dev after pip packages are installed
+                python3-dev \ 
                 python3-libnmap \
                 python3-pip \
                 python3-venv \
                 python2 \
+                pipx \
                 thefuck"
 
 #NOTE - metasploit installed in later build; not included in base
@@ -67,8 +71,6 @@ ARG TOOLS_linux/amd64="sslyze"
 # Dummy install just so we don't pass an empty string to the install command
 ARG TOOLS_linux/arm64="dnsutils"
 
-ARG TOOLS_PIP="pipx"
-
 ARG TOOLS_PIPX="bbot"
 
 RUN apt update && \
@@ -76,27 +78,38 @@ RUN apt update && \
     apt install -y --no-install-recommends $TOOLS_BASE && \
     apt install -y --no-install-recommends $TOOLS_KALI && \
     apt install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
+    pipx install $TOOLS_PIPX && \
+    apt remove -y gcc python3-dev && \
     apt autoremove -y && \
     apt clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    pip3 install --no-cache-dir $TOOLS_PIP && \
-    pipx install $TOOLS_PIPX
+    rm -rf /var/lib/apt/lists/*
+    
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
-    rm -rf /opt/SecLists/.git && \
+    rm -rf /opt/SecLists/.git* && \
     rm -rf /opt/SecLists/*.gz && \
+    rm -rf /opt/SecLists/Ai && \
+    rm -rf /opt/SecLists/Discovery/Web-Content/dutch && \
     rm -rf /opt/SecLists/Fuzzing && \
     rm -rf /opt/SecLists/IOCs && \
+    rm -rf /opt/SecLists/Miscellaneous && \
     rm -rf /opt/SecLists/Pattern-Matching && \
     rm -rf /opt/SecLists/Payloads && \
     rm -rf /opt/SecLists/Web-Shells && \
+    rm -rf /opt/SecLists/Passwords/BiblePass && \
     rm -rf /opt/SecLists/Passwords/Cracked-Hashes && \
     rm -rf /opt/SecLists/Passwords/Honeypot-Captures && \
     rm -rf /opt/SecLists/Passwords/Leaked-Databases && \
     rm -rf /opt/SecLists/Passwords/Malware && \
     rm -rf /opt/SecLists/Passwords/Permutations && \
     rm -rf /opt/SecLists/Passwords/Software && \
-    rm -rf /opt/SecLists/Passwords/WiFi-WPA
+    rm -rf /opt/SecLists/Passwords/Wikipedia && \
+    rm -rf /opt/SecLists/Passwords/WiFi-WPA && \
+    rm /opt/SecLists/Passwords/dutch* && \
+    rm /opt/SecLists/Passwords/german* && \
+    rm /opt/SecLists/Passwords/richelieu*
+
+    
     
 RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/scripts/.git && \

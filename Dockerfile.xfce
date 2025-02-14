@@ -2,7 +2,6 @@ FROM isaudits/kali:msf
 
 ENV DEBIAN_FRONTEND noninteractive
 
-#ARG S6_OVERLAY_VERSION=2.0.0.1
 ARG S6_OVERLAY_VERSION=2.2.0.3
 
 # Desktop and RDP access
@@ -14,7 +13,7 @@ RUN apt update && \
 
 # SECFORCE Sparta
 RUN apt update && \
-    apt install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 wkhtmltopdf ldap-utils rwho x11-apps finger hydra && \
+    apt install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 ldap-utils rwho x11-apps finger hydra && \
     git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
     rm -rf /opt/sparta/.git && \
     echo 'cd /opt/sparta && python3 sparta.py' > /usr/local/sbin/sparta && \

@@ -1,0 +1,63 @@
+name: Docker
+# https://docs.docker.com/build/ci/github-actions/multi-platform/
+# NOTE - not using separate runners because we need to build in sequence, not parallel
+
+# In addition to defining DOCKERHUB_REPO and GHCR_REPO, must set up the following secrets / variables in github repo / organization: 
+# variable: DOCKERHUB_USERNAME
+# secret: DOCKERHUB_TOKEN
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  DOCKERHUB_REPO: isaudits/kali
+  GHCR_REPO: ghcr.io/isaudits/docker-kali
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push - base
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: base, latest
+
+      - name: Build and push - msf
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: msf
+          dockerfile: Dockerfile.msf
+
+      - name: Build and push - xfce
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: xfce
+          dockerfile: Dockerfile.xfce
