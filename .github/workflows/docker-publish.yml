@@ -82,13 +82,13 @@ jobs:
         run: |
           mkdir -p ${{ runner.temp }}/digests
           digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+          touch "${{ runner.temp }}/digests/base/${digest#sha256:}"
 
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
           name: digests-${{ matrix.platform_tag }}
-          path: ${{ runner.temp }}/digests/*
+          path: ${{ runner.temp }}/digests/base/*
           if-no-files-found: error
           retention-days: 1
 
@@ -100,7 +100,7 @@ jobs:
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/digests
+          path: ${{ runner.temp }}/digests/base
           pattern: digests-*
           merge-multiple: true
 
@@ -133,7 +133,7 @@ jobs:
             type=raw,value=base
 
       - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
+        working-directory: ${{ runner.temp }}/digests/base
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
@@ -204,13 +204,13 @@ jobs:
         run: |
           mkdir -p ${{ runner.temp }}/digests
           digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+          touch "${{ runner.temp }}/digests/msf/${digest#sha256:}"
 
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
           name: digests-${{ matrix.platform_tag }}
-          path: ${{ runner.temp }}/digests/*
+          path: ${{ runner.temp }}/digests/msf/*
           if-no-files-found: error
           retention-days: 1
 
@@ -222,7 +222,7 @@ jobs:
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/digests
+          path: ${{ runner.temp }}/digests/msf
           pattern: digests-*
           merge-multiple: true
 
@@ -254,7 +254,7 @@ jobs:
             type=raw,value=msf
 
       - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
+        working-directory: ${{ runner.temp }}/digests/msf
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
@@ -325,13 +325,13 @@ jobs:
         run: |
           mkdir -p ${{ runner.temp }}/digests
           digest="${{ steps.build.outputs.digest }}"
-          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+          touch "${{ runner.temp }}/digests/xfce/${digest#sha256:}"
 
       - name: Upload digest
         uses: actions/upload-artifact@v4
         with:
           name: digests-${{ matrix.platform_tag }}
-          path: ${{ runner.temp }}/digests/*
+          path: ${{ runner.temp }}/digests/xfce/*
           if-no-files-found: error
           retention-days: 1
 
@@ -343,7 +343,7 @@ jobs:
       - name: Download digests
         uses: actions/download-artifact@v4
         with:
-          path: ${{ runner.temp }}/digests
+          path: ${{ runner.temp }}/digests/xfce
           pattern: digests-*
           merge-multiple: true
 
@@ -375,7 +375,7 @@ jobs:
             type=raw,value=msf
 
       - name: Create manifest list and push
-        working-directory: ${{ runner.temp }}/digests
+        working-directory: ${{ runner.temp }}/digests/xfce
         run: |
           docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
             $(printf '${{ env.DOCKERHUB_REPO }}@sha256:%s ' *)
