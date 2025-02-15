@@ -97,11 +97,14 @@ RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists
     rm -rf /opt/SecLists/Payloads && \
     rm -rf /opt/SecLists/Web-Shells && \
     rm -rf /opt/SecLists/Passwords/BiblePass && \
+    rm -rf /opt/SecLists/Passwords/Common-Credentials/Language-Specific && \
     rm -rf /opt/SecLists/Passwords/Cracked-Hashes && \
     rm -rf /opt/SecLists/Passwords/Honeypot-Captures && \
     rm -rf /opt/SecLists/Passwords/Leaked-Databases && \
     rm -rf /opt/SecLists/Passwords/Malware && \
     rm -rf /opt/SecLists/Passwords/Permutations && \
+    rm -rf /opt/SecLists/Passwords/PHP-Hashes && \
+    rm -rf /opt/SecLists/Passwords/Pwdb-Public/Wordlists/Language-Specifics && \
     rm -rf /opt/SecLists/Passwords/Software && \
     rm -rf /opt/SecLists/Passwords/Wikipedia && \
     rm -rf /opt/SecLists/Passwords/WiFi-WPA && \
