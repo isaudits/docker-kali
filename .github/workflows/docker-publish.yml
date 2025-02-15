@@ -366,7 +366,7 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=raw,value=msf
+            type=raw,value=xfce
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests/xfce
