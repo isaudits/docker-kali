@@ -80,7 +80,7 @@ jobs:
 
       - name: Export digest
         run: |
-          mkdir -p ${{ runner.temp }}/digests
+          mkdir -p ${{ runner.temp }}/digests/base
           digest="${{ steps.build.outputs.digest }}"
           touch "${{ runner.temp }}/digests/base/${digest#sha256:}"
 
@@ -202,7 +202,7 @@ jobs:
 
       - name: Export digest
         run: |
-          mkdir -p ${{ runner.temp }}/digests
+          mkdir -p ${{ runner.temp }}/digests/msf
           digest="${{ steps.build.outputs.digest }}"
           touch "${{ runner.temp }}/digests/msf/${digest#sha256:}"
 
@@ -323,7 +323,7 @@ jobs:
 
       - name: Export digest
         run: |
-          mkdir -p ${{ runner.temp }}/digests
+          mkdir -p ${{ runner.temp }}/digests/xfce
           digest="${{ steps.build.outputs.digest }}"
           touch "${{ runner.temp }}/digests/xfce/${digest#sha256:}"
 
