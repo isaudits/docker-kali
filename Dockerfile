@@ -94,8 +94,6 @@ RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists
     rm -rf /opt/SecLists/IOCs && \
     rm -rf /opt/SecLists/Miscellaneous && \
     rm -rf /opt/SecLists/Pattern-Matching && \
-    rm -rf /opt/SecLists/Payloads && \
-    rm -rf /opt/SecLists/Web-Shells && \
     rm -rf /opt/SecLists/Passwords/BiblePass && \
     rm -rf /opt/SecLists/Passwords/Common-Credentials/Language-Specific && \
     rm -rf /opt/SecLists/Passwords/Cracked-Hashes && \
