@@ -48,7 +48,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=latest
             type=raw,value=base
 
@@ -128,7 +127,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=latest
             type=raw,value=base
 
@@ -170,7 +168,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=msf
 
       - name: Login to Docker Hub
@@ -250,7 +247,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=msf
 
       - name: Create manifest list and push
@@ -291,7 +287,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=xfce
 
       - name: Login to Docker Hub
@@ -371,7 +366,6 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=sha
             type=raw,value=msf
 
       - name: Create manifest list and push
