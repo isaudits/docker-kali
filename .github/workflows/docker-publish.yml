@@ -40,11 +40,6 @@ jobs:
             platform_tag: linux-arm64
 
     steps:
-      - name: Prepare
-        run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -54,10 +49,8 @@ jobs:
             ${{ env.GHCR_REPO }}
           tags: |
             type=sha
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest
+            type=raw,value=base
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -81,7 +74,6 @@ jobs:
         with:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
-          tags: base, latest
           outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
           cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
           cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
@@ -136,10 +128,9 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=latest
+            type=raw,value=base
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
@@ -171,11 +162,6 @@ jobs:
             platform_tag: linux-arm64
 
     steps:
-      - name: Prepare
-        run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -185,10 +171,7 @@ jobs:
             ${{ env.GHCR_REPO }}
           tags: |
             type=sha
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=msf
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -213,7 +196,6 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           dockerfile: Dockerfile.msf
-          tags: msf
           outputs: type=image,"name=${{ env.DOCKERHUB_REPO }},${{ env.GHCR_REPO }}",push-by-digest=true,name-canonical=true,push=true
           cache-from: type=gha,scope=build-${{ matrix.platform_tag }}
           cache-to: type=gha,scope=build-${{ matrix.platform_tag }},mode=max
@@ -268,10 +250,8 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=msf
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
@@ -303,11 +283,6 @@ jobs:
             platform_tag: linux-arm64
 
     steps:
-      - name: Prepare
-        run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -317,10 +292,7 @@ jobs:
             ${{ env.GHCR_REPO }}
           tags: |
             type=sha
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=xfce
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -400,10 +372,8 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}
             ${{ env.GHCR_REPO }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+            type=sha
+            type=raw,value=msf
 
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
