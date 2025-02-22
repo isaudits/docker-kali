@@ -31,7 +31,7 @@ ARG TOOLS_BASE="dnsutils \
                 python3-venv \
                 python2 \
                 pipx \
-                thefuck"
+                nano"
 
 #NOTE - metasploit installed in later build; not included in base
 ARG TOOLS_KALI="crackmapexec \

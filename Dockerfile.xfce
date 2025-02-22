@@ -4,6 +4,10 @@ ENV DEBIAN_FRONTEND noninteractive
 
 ARG S6_OVERLAY_VERSION=2.2.0.3
 
+SHELL ["/bin/bash", "-c"]
+USER root
+ENV HOME /root
+
 # Desktop and RDP access
 RUN apt update && \
     apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce && \
@@ -21,6 +25,32 @@ RUN apt update && \
     apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Set up pyenv to run sparta under - SQLAlchemy no longer works with old version of Sparta; have to symlink in pyqt5
+# since it will not build inside of pyenv
+RUN curl https://pyenv.run | bash && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.zshrc && \
+    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.zshrc && \
+    echo 'eval "$(pyenv init - bash)"' >> /root/.zshrc && \
+    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.zshrc && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.bashrc && \
+    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.bashrc && \
+    echo 'eval "$(pyenv init - bash)"' >> /root/.bashrc && \
+    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.bashrc && \
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> /root/.profile && \
+    echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> /root/.profile && \
+    echo 'eval "$(pyenv init - bash)"' >> /root/.profile && \
+    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.profile && \
+    export PYENV_ROOT="$HOME/.pyenv" && \
+    export PATH="$PYENV_ROOT/bin:$PATH" && \
+    eval "$(pyenv init - bash)" && \
+    eval "$(pyenv virtualenv-init -)" && \
+    pyenv virtualenv system sparta && \
+    pyenv activate sparta && \
+    pip install --upgrade pip && \
+    pip install sqlalchemy==1.4.54 requests && \
+    ln -s /usr/lib/python3/dist-packages/PyQt5 /root/.pyenv/versions/sparta/lib/python3.13/site-packages/ && \
+    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > /usr/local/sbin/sparta
 
 # Zenmap
 RUN apt update && \ 
