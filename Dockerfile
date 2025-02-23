@@ -71,19 +71,16 @@ ARG TOOLS_linux/amd64="sslyze"
 # Dummy install just so we don't pass an empty string to the install command
 ARG TOOLS_linux/arm64="dnsutils"
 
-ARG TOOLS_PIPX="bbot"
-
 RUN apt update && \
     apt dist-upgrade -y && \
     apt install -y --no-install-recommends $TOOLS_BASE && \
     apt install -y --no-install-recommends $TOOLS_KALI && \
     apt install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
-    pipx install $TOOLS_PIPX && \
+    pipx install bbot && \
     apt remove -y gcc python3-dev && \
     apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
-    
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
     rm -rf /opt/SecLists/.git* && \
@@ -109,8 +106,6 @@ RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists
     rm /opt/SecLists/Passwords/dutch* && \
     rm /opt/SecLists/Passwords/german* && \
     rm /opt/SecLists/Passwords/richelieu*
-
-    
     
 RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/scripts/.git && \
@@ -121,7 +116,8 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/autoenum/.git && \
     ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum
 
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
+RUN git config pull.rebase false && \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
 
 RUN mkdir /data 

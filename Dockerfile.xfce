@@ -10,7 +10,7 @@ ENV HOME /root
 
 # Desktop and RDP access
 RUN apt update && \
-    apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce && \
+    apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce zenmap && \
     apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
@@ -51,17 +51,6 @@ RUN curl https://pyenv.run | bash && \
     pip install sqlalchemy==1.4.54 requests && \
     ln -s /usr/lib/python3/dist-packages/PyQt5 /root/.pyenv/versions/sparta/lib/python3.13/site-packages/ && \
     echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > /usr/local/sbin/sparta
-
-# Zenmap
-RUN apt update && \ 
-    apt install -y alien python3-gi python3-cairo gir1.2-gtk-3.0 && \
-    cd /tmp && \
-    wget https://nmap.org/dist/zenmap-7.95-1.noarch.rpm && \
-    alien -i zenmap-7.95-1.noarch.rpm && \
-    apt remove -y alien && \
-    apt autoremove -y && \
-    apt clean && \
-    rm -rf /var/lib/apt/lists/*
 
 # Add S6 overlay
 RUN [ "${TARGETARCH}" = "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s6-overlay-amd64.tar.gz"; \
