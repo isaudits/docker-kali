@@ -116,8 +116,7 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/autoenum/.git && \
     ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum
 
-RUN git config pull.rebase false && \
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
 
 RUN mkdir /data 
