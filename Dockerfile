@@ -31,7 +31,8 @@ ARG TOOLS_BASE="dnsutils \
                 python3-venv \
                 python2 \
                 pipx \
-                nano"
+                nano \
+                gh"
 
 #NOTE - metasploit installed in later build; not included in base
 ARG TOOLS_KALI="crackmapexec \
@@ -80,7 +81,8 @@ RUN apt update && \
     apt remove -y gcc python3-dev && \
     apt autoremove -y && \
     apt clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
     rm -rf /opt/SecLists/.git* && \
