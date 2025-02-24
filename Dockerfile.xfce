@@ -50,7 +50,8 @@ RUN curl https://pyenv.run | bash && \
     pip install --upgrade pip && \
     pip install sqlalchemy==1.4.54 requests && \
     ln -s /usr/lib/python3/dist-packages/PyQt5 /root/.pyenv/versions/sparta/lib/python3.13/site-packages/ && \
-    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > /usr/local/sbin/sparta
+    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > /usr/local/sbin/sparta && \
+    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > ~/.local/bin/sparta
 
 # Add S6 overlay
 RUN [ "${TARGETARCH}" = "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s6-overlay-amd64.tar.gz"; \
