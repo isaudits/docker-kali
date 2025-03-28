@@ -104,10 +104,7 @@ RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists
     rm -rf /opt/SecLists/Passwords/Pwdb-Public/Wordlists/Language-Specifics && \
     rm -rf /opt/SecLists/Passwords/Software && \
     rm -rf /opt/SecLists/Passwords/Wikipedia && \
-    rm -rf /opt/SecLists/Passwords/WiFi-WPA && \
-    rm /opt/SecLists/Passwords/dutch* && \
-    rm /opt/SecLists/Passwords/german* && \
-    rm /opt/SecLists/Passwords/richelieu*
+    rm -rf /opt/SecLists/Passwords/WiFi-WPA
     
 RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/scripts/.git && \
