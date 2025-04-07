@@ -62,6 +62,7 @@ ARG TOOLS_KALI="crackmapexec \
                 sslscan \
                 theharvester \
                 tcptraceroute \
+                villain \
                 whatweb \
                 whois \
                 wpscan"
