@@ -27,6 +27,7 @@ ARG TOOLS_BASE="dnsutils \
                 # remove python3-dev after pip packages are installed
                 python3-dev \ 
                 python3-libnmap \
+                python3-libtmux \
                 python3-pip \
                 python3-venv \
                 python2 \
@@ -114,7 +115,11 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     ln -s /opt/scripts/externalIP /usr/bin/externalIP && \
     git clone --depth=1 https://github.com/isaudits/autoenum /opt/autoenum && \
     rm -rf /opt/autoenum/.git && \
-    ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum
+    ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum && \
+    git clone --depth=1 https://github.com/isaudits/docker-mitm /opt/mitm && \
+    rm -rf /opt/mitm/.git && \
+    cp /opt/mitm/tmux.conf /root/.tmux.conf && \
+    echo 'cd /opt/mitm && python3 mitm.py' >> /usr/bin/mitm
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)

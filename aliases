@@ -18,7 +18,8 @@ then
     kali_command='docker exec -it kali'
 else
     # NOTE - have to break single quote around $HOME to expand variable string; docker run will not accept $HOME variable
-    kali_command='docker run -it --rm --name kali -v '$HOME'/.kali:/root -p 21:21 -p 25:25 -p 80:80 -p 110:110 -p 389:389 -p 443:443 -p 587:587 -p 3389:3389 -p 4443-4444:4443-4444 -p 8443:8443 isaudits/kali'
+    #kali_command='docker run -it --rm --name kali -v '$HOME'/.kali:/root -p 21:21 -p 25:25 -p 80:80 -p 110:110 -p 389:389 -p 443:443 -p 587:587 -p 3389:3389 -p 4443-4444:4443-4444 -p 8443:8443 isaudits/kali'
+    kali_command='docker run -it --rm --name kali -p 21:21 -p 25:25 -p 80:80 -p 110:110 -p 389:389 -p 443:443 -p 587:587 -p 3389:3389 -p 4443-4444:4443-4444 -p 8443:8443 isaudits/kali'
 fi
 
 # Just type kali for a command prompt!
