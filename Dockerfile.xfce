@@ -10,7 +10,7 @@ ENV HOME /root
 
 # Desktop and RDP access
 RUN apt update && \
-    apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce zenmap && \
+    apt install -y --no-install-recommends xrdp dbus-x11 xorgxrdp xauth xvfb kali-desktop-xfce xfce4-goodies zenmap && \
     apt autoremove -y && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
