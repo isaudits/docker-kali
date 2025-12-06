@@ -119,7 +119,8 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     git clone --depth=1 https://github.com/isaudits/docker-mitm /opt/mitm && \
     rm -rf /opt/mitm/.git && \
     cp /opt/mitm/tmux.conf /root/.tmux.conf && \
-    echo 'cd /opt/mitm && python3 mitm.py' >> /usr/bin/mitm
+    echo 'cd /opt/mitm && python3 mitm.py' >> /usr/bin/mitm && \
+    chmod +x /usr/bin/mitm
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)

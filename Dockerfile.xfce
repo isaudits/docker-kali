@@ -17,7 +17,7 @@ RUN apt update && \
 
 # SECFORCE Sparta
 RUN apt update && \
-    apt install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 ldap-utils rwho x11-apps finger hydra && \
+    apt install -y --no-install-recommends python3-sqlalchemy python3-pyqt5 ldap-utils x11-apps finger hydra && \
     git clone --recursive https://github.com/SECFORCE/sparta /opt/sparta && \
     rm -rf /opt/sparta/.git && \
     echo 'cd /opt/sparta && python3 sparta.py' > /usr/local/sbin/sparta && \
