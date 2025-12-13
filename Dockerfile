@@ -32,12 +32,10 @@ ARG TOOLS_BASE="dnsutils \
                 python3-venv \
                 python2 \
                 pipx \
-                nano \
-                gh"
+                nano"
 
 #NOTE - metasploit installed in later build; not included in base
-ARG TOOLS_KALI="crackmapexec \
-                dirb \
+ARG TOOLS_KALI="dirb \
                 dnsenum \
                 dnsmap \
                 dnsrecon \
@@ -50,6 +48,7 @@ ARG TOOLS_KALI="crackmapexec \
                 joomscan \
                 nbtscan \
                 netcat-traditional \
+                netexec \
                 nfs-common \
                 nikto \
                 nmap \
@@ -85,6 +84,18 @@ RUN apt update && \
     apt clean && \
     rm -rf /var/lib/apt/lists/* && \
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Github CLI removed from official Kali repo - https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+	&& cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+	&& chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& mkdir -p -m 755 /etc/apt/sources.list.d \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+	&& apt update \
+	&& apt install gh -y \
+    && apt clean \
+    && rm -rf /var/lib/apt/lists/*
     
 RUN git clone --depth=1 https://github.com/danielmiessler/SecLists /opt/SecLists && \
     rm -rf /opt/SecLists/.git* && \
