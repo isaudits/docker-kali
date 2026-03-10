@@ -35,8 +35,7 @@ ARG TOOLS_BASE="dnsutils \
                 nano"
 
 #NOTE - metasploit installed in later build; not included in base
-ARG TOOLS_KALI="amass \
-                dirb \
+ARG TOOLS_KALI="dirb \
                 dnsenum \
                 dnsmap \
                 dnsrecon \
