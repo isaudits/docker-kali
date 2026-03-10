@@ -35,7 +35,8 @@ ARG TOOLS_BASE="dnsutils \
                 nano"
 
 #NOTE - metasploit installed in later build; not included in base
-ARG TOOLS_KALI="dirb \
+ARG TOOLS_KALI="amass \
+                dirb \
                 dnsenum \
                 dnsmap \
                 dnsrecon \
@@ -60,6 +61,7 @@ ARG TOOLS_KALI="dirb \
                 snmpcheck \
                 sqlmap \
                 sslscan \
+                subfinder \
                 theharvester \
                 tcptraceroute \
                 villain \
@@ -124,7 +126,7 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     ln -s /opt/scripts/iker.py /usr/bin/iker && \
     ln -s /opt/scripts/email_crawler.py /usr/bin/email_crawler && \
     ln -s /opt/scripts/externalIP /usr/bin/externalIP && \
-    git clone --depth=1 https://github.com/isaudits/autoenum /opt/autoenum && \
+    git clone --depth=1 https://github.com/isaudits/autoenum /opt/autoenum && \ 
     rm -rf /opt/autoenum/.git && \
     ln -s /opt/autoenum/autoenum.py /usr/bin/autoenum && \
     git clone --depth=1 https://github.com/isaudits/docker-mitm /opt/mitm && \
@@ -135,6 +137,9 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
+
+# Install Openclaw so we can use docker image as a worker node or as a standalone Openclaw instance
+RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard --no-prompt
 
 RUN mkdir /data 
 
