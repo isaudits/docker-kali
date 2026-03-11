@@ -41,6 +41,7 @@ ARG TOOLS_KALI="dirb \
                 dnsrecon \
                 enum4linux \
                 exploitdb \
+                ffuf \
                 fierce \
                 hydra \
                 ike-scan \
