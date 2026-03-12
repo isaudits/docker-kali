@@ -81,6 +81,7 @@ RUN apt update && \
     apt install -y --no-install-recommends $TOOLS_KALI && \
     apt install -y --no-install-recommends $TOOLS_${TARGETARCH} && \
     pipx install bbot && \
+    pipx ensurepath && \
     apt remove -y gcc python3-dev && \
     apt autoremove -y && \
     apt clean && \
@@ -137,9 +138,6 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
-
-# Install Openclaw so we can use docker image as a worker node or as a standalone Openclaw instance
-RUN curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard --no-prompt
 
 RUN mkdir /data 
 
