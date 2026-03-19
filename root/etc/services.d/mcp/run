@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+# NOTE - this wraps the stdio MCP server with mcp-proxy to turn it into a SSE MCP server that can be run as an s6 service
+
+cd /opt/MCP-Kali-Server
+. .venv/bin/activate
+exec mcp-proxy --port 8765 -- python3 mcp-server/mcp_server.py --server http://localhost:5000

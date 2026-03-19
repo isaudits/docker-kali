@@ -35,7 +35,9 @@ ARG TOOLS_BASE="dnsutils \
                 nano"
 
 #NOTE - metasploit installed in later build; not included in base
-ARG TOOLS_KALI="dirb \
+ARG TOOLS_KALI="arjun \
+                assetfinder \
+                dirb \
                 dnsenum \
                 dnsmap \
                 dnsrecon \
@@ -43,6 +45,7 @@ ARG TOOLS_KALI="dirb \
                 exploitdb \
                 ffuf \
                 fierce \
+                gobuster \
                 hydra \
                 ike-scan \
                 impacket-scripts \
@@ -53,6 +56,7 @@ ARG TOOLS_KALI="dirb \
                 nfs-common \
                 nikto \
                 nmap \
+                nuclei \
                 onesixtyone \
                 python3-scrapy \
                 recon-ng \

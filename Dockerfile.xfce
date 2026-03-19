@@ -61,6 +61,14 @@ RUN [ "${TARGETARCH}" = "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s
     tar xzf s6-overlay-amd64.tar.gz -C /usr ./bin && \
     rm -f s6-overlay-amd64.tar.gz
 
+RUN git clone --depth=1 https://github.com/TriV3/MCP-Kali-Server /opt/MCP-Kali-Server && \
+    cd /opt/MCP-Kali-Server && \
+    python3 -m venv .venv && \
+    . .venv/bin/activate && \
+    pip install -r requirements.kali.txt && \
+    pip install -r requirements.mcp.txt && \
+    pip install mcp-proxy
+
 # add local files
 COPY root/ /
 
