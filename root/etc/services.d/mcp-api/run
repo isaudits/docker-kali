@@ -1,5 +1,0 @@
-#!/usr/bin/with-contenv bash
-
-cd /opt/MCP-Kali-Server
-. .venv/bin/activate
-python3 kali-server/kali_server.py
