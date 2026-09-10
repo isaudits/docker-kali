@@ -140,12 +140,7 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     cp /opt/mitm/tmux.conf /root/.tmux.conf && \
     echo 'cd /opt/mitm && python3 mitm.py' >> /usr/bin/mitm && \
     chmod +x /usr/bin/mitm && \
-    git clone --depth=1 https://github.com/TriV3/MCP-Kali-Server /opt/MCP-Kali-Server && \
-    rm -rf /opt/MCP-Kali-Server/.git && \
-    ln -s /opt/MCP-Kali-Server/mcp-server/mcp_server.py /usr/bin/mcp_server && \
-    chmod +x /usr/bin/mcp_server && \
-    ln -s /opt/MCP-Kali-Server/kali-server/kali_server.py /usr/bin/kali_server && \
-    chmod +x /usr/bin/kali_server
+    npm install -g @cyberstrike-io/cyberstrike@latest
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh)
