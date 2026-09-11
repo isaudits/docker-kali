@@ -56,17 +56,19 @@ RUN curl https://pyenv.run | bash && \
     pyenv activate sparta && \
     pip install --upgrade pip && \
     pip install sqlalchemy==1.4.54 requests && \
-    ln -s /usr/lib/python3/dist-packages/PyQt5 /root/.pyenv/versions/sparta/lib/python3.13/site-packages/ && \
+    ln -s /usr/lib/python3/dist-packages/PyQt5 "$(python -c 'import sysconfig; print(sysconfig.get_path("purelib"))')/" && \
     echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > /usr/local/sbin/sparta && \
-    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > ~/.local/bin/sparta
+    mkdir -p ~/.local/bin && \
+    echo 'cd /opt/sparta && eval "$(pyenv init -)" && pyenv activate sparta && python3 sparta.py' > ~/.local/bin/sparta && \
+    chmod 755 ~/.local/bin/sparta
 
 # Add S6 overlay
+ARG TARGETARCH
 RUN [ "${TARGETARCH}" = "arm64" ] && FILE="s6-overlay-aarch64.tar.gz" || FILE="s6-overlay-amd64.tar.gz"; \
     wget https://github.com/just-containers/s6-overlay/releases/download/v$S6_OVERLAY_VERSION/${FILE} && \
-    #tar xzf s6-overlay-amd64.tar.gz -C / && \
-    tar xzf s6-overlay-amd64.tar.gz -C / --exclude="./bin" && \
-    tar xzf s6-overlay-amd64.tar.gz -C /usr ./bin && \
-    rm -f s6-overlay-amd64.tar.gz
+    tar xzf ${FILE} -C / --exclude="./bin" && \
+    tar xzf ${FILE} -C /usr ./bin && \
+    rm -f ${FILE}
 
 # add local files
 COPY root/ /
