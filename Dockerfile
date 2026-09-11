@@ -16,6 +16,7 @@ ARG TOOLS_BASE="dnsutils \
                 git \
                 curl \
                 net-tools \
+                npm \
                 traceroute \
                 tcptraceroute \
                 iputils-ping \
@@ -139,11 +140,11 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
     rm -rf /opt/mitm/.git && \
     cp /opt/mitm/tmux.conf /root/.tmux.conf && \
     echo 'cd /opt/mitm && python3 mitm.py' >> /usr/bin/mitm && \
-    chmod +x /usr/bin/mitm && \
-    npm install -g @cyberstrike-io/cyberstrike@latest
+    chmod +x /usr/bin/mitm 
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
-    chsh -s $(which zsh)
+    chsh -s $(which zsh) && \
+    curl -fsSL https://cyberstrike.io/install.sh | bash
 
 RUN mkdir /data 
 
