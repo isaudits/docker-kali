@@ -144,7 +144,7 @@ RUN git clone --depth=1 https://github.com/isaudits/scripts /opt/scripts && \
 
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh) --unattended" && \
     chsh -s $(which zsh) && \
-    curl -fsSL https://cyberstrike.io/install.sh | bash
+    npm install -g @cyberstrike-io/cyberstrike@latest
 
 RUN mkdir /data 
 
