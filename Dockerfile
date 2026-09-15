@@ -19,6 +19,7 @@ ARG TOOLS_BASE="dnsutils \
                 npm \
                 traceroute \
                 tcptraceroute \
+                tftp-hpa \
                 iputils-ping \
                 pciutils \
                 openssh-server \
@@ -34,6 +35,8 @@ ARG TOOLS_BASE="dnsutils \
                 python3-mcp \
                 python2 \
                 pipx \
+                rsync \
+                atftp \
                 nano"
 
 #NOTE - metasploit installed in later build; not included in base
@@ -52,6 +55,7 @@ ARG TOOLS_KALI="arjun \
                 ike-scan \
                 impacket-scripts \
                 joomscan \
+                kerbrute \
                 nbtscan \
                 netcat-traditional \
                 netexec \
