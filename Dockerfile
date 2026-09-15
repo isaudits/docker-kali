@@ -55,7 +55,6 @@ ARG TOOLS_KALI="arjun \
                 ike-scan \
                 impacket-scripts \
                 joomscan \
-                kerbrute \
                 nbtscan \
                 netcat-traditional \
                 netexec \
